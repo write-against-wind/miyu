@@ -1,0 +1,32 @@
+node_modules/
+dist/
+.npm-cache/
+.tools/
+test-results/
+*.log
+*.miyu
+*.vault
+*.tmp
+
+# Local credentials and private data
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+.aws/
+.codex/
+.agents/
+
+# Packaged apps are attached to GitHub Releases
+*.exe
+*.msi
+*.7z
+*.blockmap
+
+# Local editor / operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini

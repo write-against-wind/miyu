@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>密屿 · 本地密码本</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main id="loading-screen" class="loading-screen" aria-live="polite"><span class="loading-mark">密</span><p>正在打开你的私密空间…</p></main>
+
+  <main id="gate-screen" class="gate-screen hidden">
+    <section class="gate-story" aria-label="密屿介绍">
+      <a class="brand gate-brand" tabindex="-1"><span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M8 27V16l12-7 12 7v11l-12 7z"/><path d="m8 16 12 7 12-7M20 23v11M14 12.5l12 7v11"/></svg></span><span>密屿<span class="brand-caption">MIYU · PRIVATE VAULT</span></span></a>
+      <div class="gate-editorial"><span class="eyebrow">A LITTLE SPACE. ONLY YOURS.</span><h1>记住一个密码，<br>安放所有秘密。</h1><p>给散落各处的账号，一个安心的归处。<br>只在你的电脑里，也只属于你。</p></div>
+      <div class="island-art" aria-hidden="true"><svg viewBox="0 0 560 310"><defs><linearGradient id="island-top" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c9d7bd"/><stop offset="100%" stop-color="#769a82"/></linearGradient><linearGradient id="island-side" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5f806e"/><stop offset="100%" stop-color="#345548"/></linearGradient></defs><ellipse class="art-orbit" cx="287" cy="235" rx="245" ry="65"/><ellipse class="art-orbit" cx="287" cy="235" rx="191" ry="48"/><path fill="url(#island-side)" d="m124 201 150 78 166-80v31l-166 76-150-79z"/><path fill="url(#island-top)" d="m124 201 149-74 167 72-166 80z"/><path fill="#63846e" opacity=".45" d="m213 180 87-42 98 44-82 41z"/><path fill="#ebeee2" d="m212 127 87-42 89 39-87 44z"/><path fill="#c0d0b5" d="m212 127 89 41v75l-89-42z"/><path fill="#91ae92" d="m301 168 87-44v76l-87 43z"/><path fill="#f6f5e9" d="m226 122 73-35 75 33-73 37z"/><path fill="#234b3d" d="M329 148v-39c0-18-13-24-27-17l-26 13c-10 5-16 16-16 30v17l16 8v-26c0-7 3-13 9-16l19-9c5-3 10 0 10 8v39z"/><path fill="#d4c9a3" d="m285 178 15 7v23l-15-7z"/><path stroke="#e6e6d7" stroke-width="2" fill="none" d="m115 134 15-8 15 8-15 8zm307-36 9-5 9 5-9 5z"/><circle fill="#b1c6a7" cx="175" cy="81" r="5"/><circle fill="#d6cfb8" cx="416" cy="249" r="4"/><path stroke="#9bb7a0" stroke-width="2" d="M384 64v12m-6-6h12M144 251v10m-5-5h10"/></svg></div>
+      <div class="gate-footnote"><span class="status-dot"></span>本地存储<span>·</span>离线加密，自己掌控</div>
+    </section>
+    <section class="gate-form-side">
+      <div class="gate-form-wrap">
+        <div class="gate-icon" data-icon="lock" aria-hidden="true"></div>
+        <span class="eyebrow gate-step" id="gate-step">YOUR PRIVATE SPACE</span>
+        <h2 id="gate-title">创建你的密码库</h2>
+        <p class="gate-description" id="gate-description">设置一个主密码，开启专属的私密空间。</p>
+        <form id="gate-form">
+          <label class="field-label" for="master-password">主密码</label>
+          <div class="input-with-action"><input id="master-password" type="password" autocomplete="new-password" minlength="8" maxlength="1024" placeholder="至少 8 个字符" required><button type="button" class="icon-button" id="toggle-master" aria-label="显示主密码" title="显示主密码" data-icon="eye"></button></div>
+          <div id="create-only">
+            <div class="password-meter" aria-hidden="true"><span id="master-strength-fill"></span></div>
+            <p class="field-help" id="master-strength-text">推荐使用容易记住的长句，混合数字与符号。</p>
+            <label class="field-label spaced" for="confirm-password">确认主密码</label>
+            <input id="confirm-password" type="password" autocomplete="new-password" maxlength="1024" placeholder="再输入一次主密码" required>
+            <div class="notice gate-notice"><span data-icon="shield" aria-hidden="true"></span><p><strong>请牢记你的主密码</strong>密屿无法找回主密码。忘记后将无法打开密码库，也无法恢复加密备份。</p></div>
+          </div>
+          <p id="gate-error" class="inline-error hidden" role="alert"></p>
+          <button class="button button-primary gate-submit" id="gate-submit" type="submit"><span id="gate-submit-text">创建密码库</span><span data-icon="arrow-right" aria-hidden="true"></span></button>
+        </form>
+        <div class="gate-security"><span data-icon="shield-check" aria-hidden="true"></span>主密码用于加密，仅保存在你的记忆里</div>
+      </div>
+      <div class="gate-bottom">密屿 MIYU<span>为每一份秘密，留一座岛。</span></div>
+    </section>
+  </main>
+
+  <main id="app-screen" class="app-screen hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M8 27V16l12-7 12 7v11l-12 7z"/><path d="m8 16 12 7 12-7M20 23v11M14 12.5l12 7v11"/></svg></span><span>密屿<span class="brand-caption">本地密码本</span></span></div>
+      <button id="new-entry" class="button button-primary new-entry"><span data-icon="plus" aria-hidden="true"></span>添加账号</button>
+      <nav aria-label="密码库导航" class="navigation">
+        <p class="nav-section-label">我的密码库</p>
+        <button class="nav-item active" data-filter="all" aria-current="page"><span data-icon="grid" aria-hidden="true"></span><span>所有账号</span><span class="nav-count" id="all-count">0</span></button>
+        <button class="nav-item" data-filter="favorites"><span data-icon="star" aria-hidden="true"></span><span>我的收藏</span><span class="nav-count" id="favorite-count">0</span></button>
+        <p class="nav-section-label category-label">分类</p>
+        <button class="nav-item" data-filter="工作"><span class="category-dot work"></span><span>工作</span><span class="nav-count" data-category-count="工作">0</span></button>
+        <button class="nav-item" data-filter="个人"><span class="category-dot personal"></span><span>个人</span><span class="nav-count" data-category-count="个人">0</span></button>
+        <button class="nav-item" data-filter="财务"><span class="category-dot finance"></span><span>财务</span><span class="nav-count" data-category-count="财务">0</span></button>
+        <button class="nav-item" data-filter="社交"><span class="category-dot social"></span><span>社交</span><span class="nav-count" data-category-count="社交">0</span></button>
+        <button class="nav-item" data-filter="其他"><span class="category-dot other"></span><span>其他</span><span class="nav-count" data-category-count="其他">0</span></button>
+        <p class="nav-section-label category-label">工具</p>
+        <button class="nav-item" id="open-generator"><span data-icon="wand" aria-hidden="true"></span><span>密码生成器</span></button>
+        <button class="nav-item" id="open-backup"><span data-icon="archive" aria-hidden="true"></span><span>加密备份</span></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="local-status"><span class="status-dot"></span><span>数据仅保存在此电脑</span><span data-icon="shield-check" aria-hidden="true"></span></div><div class="sidebar-actions"><button id="open-settings" class="subtle-button"><span data-icon="settings" aria-hidden="true"></span>设置</button><button id="lock-vault" class="subtle-button" title="立即锁定 · Ctrl+L"><span data-icon="lock" aria-hidden="true"></span>锁定</button></div></div>
+    </aside>
+    <section class="vault-workspace">
+      <header class="workspace-header"><div><div class="breadcrumb">私人空间<span>/</span>密码库</div><h1 id="view-title">所有账号<span id="view-count">0</span></h1></div><div class="header-status"><span class="small-shield" data-icon="shield-check" aria-hidden="true"></span><span>密码库已解锁<small id="auto-lock-label">闲置 5 分钟后自动锁定</small></span></div></header>
+      <div class="vault-columns">
+        <section class="entry-panel" aria-label="账号列表">
+          <div class="search-wrapper"><span data-icon="search" aria-hidden="true"></span><input id="search" type="search" placeholder="搜索账号、用户名或网站" autocomplete="off" aria-label="搜索账号"><kbd>Ctrl K</kbd></div>
+          <div class="list-caption"><span id="list-caption">全部账号</span><span>最近更新</span></div>
+          <div id="entry-list" class="entry-list" role="list" aria-label="保存的账号"></div>
+          <div id="list-empty" class="list-empty"><span data-icon="search" aria-hidden="true"></span><p id="list-empty-text">还没有保存的账号</p><span id="list-empty-help">从添加你的第一个账号开始</span></div>
+          <footer class="list-footer"><span data-icon="lock" aria-hidden="true"></span><span>每一次保存，都会加密</span></footer>
+        </section>
+        <section class="detail-panel" aria-label="账号详情">
+          <div id="detail-empty" class="detail-empty"><div class="empty-illustration" aria-hidden="true"><div class="empty-orbit"></div><div class="empty-card empty-card-back"></div><div class="empty-card empty-card-front"><span class="empty-avatar" data-icon="shield-check"></span><span class="empty-line"></span><span class="empty-dots">••••••••</span></div><span class="empty-spark">✦</span><span class="empty-plus">+</span></div><span class="eyebrow">A HOME FOR YOUR PASSWORDS</span><h2 id="empty-title">让秘密，井然有序。</h2><p id="empty-description">保存网站、账号与密码。<br>下次需要时，就在这里。</p><button id="empty-add" class="button button-primary"><span data-icon="plus" aria-hidden="true"></span>添加第一个账号</button><div class="empty-assurance"><span data-icon="shield" aria-hidden="true"></span>本地加密 · 私密存储 · 由你掌控</div></div>
+          <article id="entry-detail" class="entry-detail hidden">
+            <div class="detail-heading"><div id="detail-avatar" class="site-avatar large"></div><div class="detail-heading-text"><h2 id="detail-title"></h2><p id="detail-domain"></p></div><button id="toggle-favorite" class="icon-button favorite-toggle" aria-label="收藏账号" title="收藏账号" data-icon="star"></button></div>
+            <div class="detail-meta"><span id="detail-category" class="category-chip"></span><span class="detail-encrypted"><span data-icon="lock" aria-hidden="true"></span>已加密保存</span></div>
+            <div class="credential-group"><div class="credential-field"><label>用户名 / 邮箱</label><div class="credential-value"><span id="detail-username"></span><button id="copy-username" class="icon-button" title="复制用户名" aria-label="复制用户名" data-icon="copy"></button></div></div><div class="credential-field"><label>密码</label><div class="credential-value"><span id="detail-password" class="password-value">••••••••••••</span><div class="field-actions"><button id="reveal-password" class="icon-button" title="显示密码" aria-label="显示密码" data-icon="eye"></button><button id="copy-password" class="icon-button" title="复制密码" aria-label="复制密码" data-icon="copy"></button></div></div></div><div class="credential-field"><label>网站地址</label><div class="credential-value"><span id="detail-url" class="url-value"></span><span class="muted-icon" data-icon="globe" aria-hidden="true"></span></div></div></div>
+            <section class="notes-section"><h3><span data-icon="note" aria-hidden="true"></span>备注</h3><p id="detail-notes"></p></section>
+            <div class="detail-dates"><span id="detail-updated"></span><span id="detail-created"></span></div>
+            <footer class="detail-actions"><button id="edit-entry" class="button button-secondary"><span data-icon="edit" aria-hidden="true"></span>编辑账号</button><button id="delete-entry" class="subtle-button delete-button"><span data-icon="trash" aria-hidden="true"></span>删除账号</button></footer>
+          </article>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="entry-dialog" class="modal entry-modal" aria-labelledby="entry-dialog-title"><form id="entry-form"><header class="modal-header"><div><span class="eyebrow">YOUR VAULT</span><h2 id="entry-dialog-title">添加账号</h2></div><button type="button" class="icon-button dialog-close" aria-label="关闭" data-icon="close"></button></header><div class="modal-body"><div class="form-row"><div class="form-field grow"><label class="field-label" for="entry-title">账号名称 <span class="required">*</span></label><input id="entry-title" maxlength="120" placeholder="例如：我的邮箱" required></div><div class="form-field"><label class="field-label" for="entry-category">分类</label><select id="entry-category"><option>个人</option><option>工作</option><option>财务</option><option>社交</option><option>其他</option></select></div></div><label class="field-label spaced" for="entry-url">网站地址</label><input id="entry-url" maxlength="2048" placeholder="例如：https://example.com"><label class="field-label spaced" for="entry-username">用户名 / 邮箱</label><input id="entry-username" maxlength="512" autocomplete="off" placeholder="登录时使用的账号"><div class="label-row"><label class="field-label" for="entry-password">密码 <span class="required">*</span></label><button id="entry-generate" type="button" class="text-button"><span data-icon="wand" aria-hidden="true"></span>生成密码</button></div><div class="input-with-action"><input id="entry-password" type="password" maxlength="4096" autocomplete="new-password" required placeholder="输入或生成一个密码"><button id="toggle-entry-password" type="button" class="icon-button" aria-label="显示密码" data-icon="eye"></button></div><p class="field-help" id="entry-password-help">建议每个账号使用不同的密码。</p><label class="field-label spaced" for="entry-notes">备注</label><textarea id="entry-notes" rows="3" maxlength="10000" placeholder="任何需要记住的小细节…"></textarea><label class="checkbox-row favorite-check"><input id="entry-favorite" type="checkbox"><span>加入收藏，方便快速找到</span></label><p id="entry-error" class="inline-error hidden" role="alert"></p></div><footer class="modal-footer"><span class="footer-security"><span data-icon="lock" aria-hidden="true"></span>仅加密保存在本机</span><button type="button" class="button button-secondary dialog-close">取消</button><button id="save-entry" type="submit" class="button button-primary">保存账号</button></footer></form></dialog>
+
+  <dialog id="confirm-dialog" class="modal confirm-modal" aria-labelledby="confirm-title"><form id="confirm-form"><header class="modal-header"><h2 id="confirm-title">删除这个账号？</h2><button type="button" class="icon-button dialog-close" aria-label="关闭" data-icon="close"></button></header><div class="modal-body"><p id="confirm-description" class="confirm-description"></p><p id="confirm-error" class="inline-error hidden" role="alert"></p></div><footer class="modal-footer"><button type="button" class="button button-secondary dialog-close">取消</button><button id="confirm-action" class="button button-danger" type="submit">确认删除</button></footer></form></dialog>
+
+  <dialog id="generator-dialog" class="modal generator-modal" aria-labelledby="generator-title"><header class="modal-header"><div><span class="eyebrow">MAKE IT UNPREDICTABLE</span><h2 id="generator-title">密码生成器</h2></div><button type="button" class="icon-button dialog-close" aria-label="关闭" data-icon="close"></button></header><div class="modal-body"><p class="modal-description">给每个账号，一个独一无二的强密码。</p><div class="generated-output"><output id="generated-password" aria-label="生成的密码"></output><button id="regenerate-password" class="icon-button" title="重新生成" aria-label="重新生成密码" data-icon="refresh"></button></div><div class="generator-quality"><span class="status-dot"></span>使用系统安全随机源生成</div><div class="range-heading"><label for="password-length">密码长度</label><output id="length-value">20</output></div><input id="password-length" type="range" min="8" max="64" value="20"><div class="generator-options"><label class="checkbox-row"><input id="gen-uppercase" type="checkbox" checked><span>大写字母 <small>A – Z</small></span></label><label class="checkbox-row"><input id="gen-lowercase" type="checkbox" checked><span>小写字母 <small>a – z</small></span></label><label class="checkbox-row"><input id="gen-numbers" type="checkbox" checked><span>数字 <small>0 – 9</small></span></label><label class="checkbox-row"><input id="gen-symbols" type="checkbox" checked><span>符号 <small>! @ # $</small></span></label></div><label class="checkbox-row exclude-option"><input id="gen-exclude" type="checkbox" checked><span>排除易混淆字符 <small>例如 O、0、I、l</small></span></label><p id="generator-error" class="inline-error hidden" role="alert"></p></div><footer class="modal-footer"><button id="generator-cancel" class="button button-secondary dialog-close">关闭</button><button id="use-generated" class="button button-primary"><span data-icon="plus" aria-hidden="true"></span>用于新账号</button></footer></dialog>
+
+  <dialog id="settings-dialog" class="modal settings-modal" aria-labelledby="settings-title"><header class="modal-header"><div><span class="eyebrow">ALWAYS IN YOUR HANDS</span><h2 id="settings-title">密码库设置</h2></div><button type="button" class="icon-button dialog-close" aria-label="关闭" data-icon="close"></button></header><div class="settings-tabs" role="tablist" aria-label="设置分类"><button id="tab-security" class="settings-tab active" role="tab" aria-controls="security-settings" aria-selected="true">安全与偏好</button><button id="tab-backup" class="settings-tab" role="tab" aria-controls="backup-settings" aria-selected="false">备份与恢复</button></div><div class="modal-body settings-body"><section id="security-settings" role="tabpanel" aria-labelledby="tab-security"><div class="setting-row"><div><h3>自动锁定</h3><p>一段时间未操作后，自动锁定密码库。</p></div><select id="auto-lock" aria-label="自动锁定时间"><option value="1">1 分钟</option><option value="5">5 分钟</option><option value="15">15 分钟</option><option value="30">30 分钟</option></select></div><section class="setting-section"><h3>更改主密码</h3><p>更新后，加密备份仍需使用导出时的主密码。</p><form id="change-password-form"><label class="field-label spaced" for="current-password">当前主密码</label><input id="current-password" type="password" autocomplete="current-password" maxlength="1024" required><div class="form-row spaced"><div class="form-field grow"><label class="field-label" for="new-master-password">新主密码</label><input id="new-master-password" type="password" autocomplete="new-password" minlength="8" maxlength="1024" placeholder="至少 8 个字符" required></div><div class="form-field grow"><label class="field-label" for="confirm-new-password">确认新主密码</label><input id="confirm-new-password" type="password" autocomplete="new-password" maxlength="1024" placeholder="再输入一次" required></div></div><p id="change-password-error" class="inline-error hidden" role="alert"></p><button id="change-password-submit" type="submit" class="button button-secondary spaced">更新主密码</button></form></section><div class="data-path"><span data-icon="folder" aria-hidden="true"></span><div><strong>本机数据位置</strong><p id="data-path"></p></div></div></section><section id="backup-settings" class="hidden" role="tabpanel" aria-labelledby="tab-backup"><div class="backup-hero"><span data-icon="archive" aria-hidden="true"></span><h3>给安心，多留一份备份。</h3><p>备份文件经过加密，可存放到移动硬盘。<br>请妥善保管备份时使用的主密码。</p></div><div class="backup-action-row"><div><h3>导出加密备份</h3><p>完整备份当前密码库中的所有账号。</p></div><button id="export-backup" class="button button-secondary"><span data-icon="download" aria-hidden="true"></span>导出备份</button></div><form id="restore-form" class="restore-section"><h3>从备份恢复</h3><p>恢复将<strong>替换当前所有账号</strong>，当前主密码保持不变。建议先导出一份备份。</p><label class="field-label spaced" for="backup-password">备份文件的主密码</label><input id="backup-password" type="password" maxlength="1024" autocomplete="off" placeholder="输入导出这份备份时的主密码" required><label class="checkbox-row restore-confirm"><input id="restore-confirm" type="checkbox" required><span>我确认用备份内容替换当前密码库</span></label><p id="restore-error" class="inline-error hidden" role="alert"></p><button id="restore-backup" type="submit" class="button button-secondary"><span data-icon="upload" aria-hidden="true"></span>选择备份文件并恢复</button></form></section></div><footer class="modal-footer"><span class="footer-security"><span data-icon="shield-check" aria-hidden="true"></span>你的数据始终由你掌控</span><button type="button" class="button button-primary dialog-close">完成</button></footer></dialog>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
