@@ -12,6 +12,8 @@
     "start": "node scripts/start.cjs",
     "test": "node --test tests/vault.test.cjs",
     "test:e2e": "node scripts/e2e.cjs",
+    "check:version": "node scripts/release-metadata.cjs",
+    "release:metadata": "node scripts/release-metadata.cjs --prepare",
     "build": "electron-builder --win portable --x64",
     "build:dir": "electron-builder --win --dir --x64"
   },

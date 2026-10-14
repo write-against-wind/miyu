@@ -4,7 +4,7 @@
 
 ## 开始使用
 
-运行 `dist/Miyu-Vault-1.0.1-x64.exe`，或双击项目中的 **启动密屿.cmd**。便携版无需安装开发依赖。安装了 Node.js 的电脑也可以在 VS Code 终端运行 `npm start`。
+从 [GitHub Releases](https://github.com/write-against-wind/miyu/releases/latest) 下载 `Miyu-Vault-版本号-x64.exe`，双击即可使用。便携版无需安装 Node.js 或开发依赖。GitHub 的 Source code 下载包仅包含源码。
 
 1. 第一次打开时，设置并确认至少 8 个字符的主密码。建议使用独特的长短句。
 2. 点击“添加账号”，填写名称、网址、用户名和密码。可以直接生成随机密码。
@@ -37,7 +37,7 @@
 
 Windows x64，Node.js **22.12 或以上**，npm。当前使用 Electron 44.4.3 和原生 HTML/CSS/JavaScript；加密核心仅依赖 Node.js 标准库，没有远端数据库和 CDN。
 
-项目已精简：保留源代码和约 95.5 MB 的便携版，移除了 `node_modules/`、`.npm-cache/`、`.tools/` 和 `dist/win-unpacked/` 等可重新生成的文件。普通使用只需要便携版 `.exe`；重新开发、运行桌面测试或打包前，先执行 `npm ci` 恢复开发依赖，磁盘占用会相应增加。
+Git 仓库只保存源码、测试、文档和依赖清单；便携版在 Releases 中下载。开发、运行桌面测试或打包前，先执行 `npm ci` 恢复开发依赖，磁盘占用会相应增加。依赖与构建缓存均可重新生成，无需长期保留。
 
 ```powershell
 npm ci
@@ -77,3 +77,12 @@ assets/              应用图标
 这是可继续开发的本地应用，尚未经独立安全审计。加密主要保护静态文件；无法防止已控制电脑的恶意软件读取键盘、屏幕或解锁时的内存。JavaScript 字符串也无法保证从物理内存或系统分页文件彻底擦除。自动清理不保证清除 Windows 剪贴板历史、固定项目或第三方剪贴板管理器的副本。
 
 实现参考：[Electron 安全建议](https://www.electronjs.org/docs/latest/tutorial/security)、[Node.js 加密 API](https://nodejs.org/api/crypto.html)。
+
+## 版本维护
+
+当前版本：1.0.1。每次提交可在 GitHub 的 Commits 中查看，每次正式发布可在 [Releases](https://github.com/write-against-wind/miyu/releases) 中下载。
+
+- [更新日志](CHANGELOG.md)：各版本的功能与修复。
+- [开发与发布步骤](docs/VERSIONING.md)：提交修改、更新版本号、创建发布标签。
+- 提交到 main 或发起 Pull Request 后，自动运行 Windows 测试。
+- 推送新的版本标签（例如 v1.0.2）后，自动测试、打包并发布 exe 和 SHA-256 校验文件。
